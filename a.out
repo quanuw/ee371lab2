@@ -1,0 +1,36 @@
+#! c:/iverilog-x86/bin/vvp
+:ivl_version "10.0 (stable)" "(v10_0)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_00c53f78 .scope module, "arriveAndDepartSignal" "arriveAndDepartSignal" 2 1;
+ .timescale 0 0;
+    .port_info 0 /OUTPUT 1 "arriveSignal"
+    .port_info 1 /OUTPUT 1 "leaveSignal"
+    .port_info 2 /INPUT 1 "arriveSwitch"
+    .port_info 3 /INPUT 1 "leaveSwitch"
+    .port_info 4 /INPUT 1 "bathIn"
+    .port_info 5 /INPUT 1 "clk"
+    .port_info 6 /INPUT 1 "rst"
+o0065d864 .functor BUFZ 1, C4<z>; HiZ drive
+o0065d87c .functor BUFZ 1, C4<z>; HiZ drive
+L_006891b8 .functor AND 1, o0065d864, o0065d87c, C4<1>, C4<1>;
+v00c540a8_0 .net "arriveSignal", 0 0, L_006891b8;  1 drivers
+v00c54100_0 .net "arriveSwitch", 0 0, o0065d864;  0 drivers
+v00c5ff78_0 .net "bathIn", 0 0, o0065d87c;  0 drivers
+o0065d894 .functor BUFZ 1, C4<z>; HiZ drive
+v00688858_0 .net "clk", 0 0, o0065d894;  0 drivers
+o0065d8ac .functor BUFZ 1, C4<z>; HiZ drive
+v006888b0_0 .net "leaveSignal", 0 0, o0065d8ac;  0 drivers
+o0065d8c4 .functor BUFZ 1, C4<z>; HiZ drive
+v00688908_0 .net "leaveSwitch", 0 0, o0065d8c4;  0 drivers
+o0065d8dc .functor BUFZ 1, C4<z>; HiZ drive
+v00688960_0 .net "rst", 0 0, o0065d8dc;  0 drivers
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "arriveAndDepartSignal.v";
