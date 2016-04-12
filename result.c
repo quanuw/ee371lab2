@@ -20,7 +20,7 @@ int main() { // results in 5, should we use float?
 	int* DPtr = &D;
 	int* EPtr = &E;
 	
-	// result = ((A - B)) * (C + D)) / E
+	// result = ((A - B)) * (C + D)) / E = 5.555
 	result = ((*APtr - *BPtr) * (*CPtr + *DPtr)) / *EPtr;
 	
 	printf("The result is equal to %d.", result);
