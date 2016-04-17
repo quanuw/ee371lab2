@@ -1,6 +1,6 @@
 // module for arrival, departure, inner port, and outer port
 module arriveAndDepartSignal(arriveSignal, leaveSignal, arriveSwitch,
-    leaveSwitch, timer, rst);
+    leaveSwitch, pressureUp, pressureDown, timer, rst);
     output arriveSignal;
     output leaveSignal;
     input arriveSwitch;
