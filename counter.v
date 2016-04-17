@@ -9,14 +9,12 @@ module counter (clk, reset, counterSeconds, signal);
 	output wire signal;
 	reg count;
 	always @(posedge clk) begin
-		if (reset) begin
-			count <= 1'b0;
-		end else if (count == counterSeconds) begin
-			count <= 10'b0;
+		if (reset || count == 0) begin
+			count <= counterSeconds;
 		end else begin
-			count <= count + 10'b1;
+			count <= count - 10'b1;
 		end
 	end
-	assign signal = count == (counterSeconds - 1);
+	assign signal = count == 10'b0;
 endmodule
 				
