@@ -10,11 +10,40 @@ SW);
 	wire [31:0] divided_clocks;
 	wire [3:0] CounterLights;
 	
-
 	clock_divider dividclock(.clock(CLOCK_50), .divided_clocks(divided_clocks));
-	// RippleDownCounter_4bit RippleDown(.clk(divided_clocks[25]), .rst(SW[9]), .count(LEDR[3:0]));
-	// syncDownCounter(.clk(divided_clocks[25]), .rst(SW[9]), .out(LEDR[3:0]));
-	// johnsonDown johnsonDownCounter(.clk(divided_clocks[25]), .reset(SW[9]), .signal(LEDR[3:0]));
-	counter4 schematic (.clock(divided_clocks[25]), .reset(SW[9]), .out(LEDR[3:0]));
+	wire clock;
+	assign clock = divided_clocks[25];
+	
+	wire sw0, sw1, sw2, sw3, key0, key1, key2;
+	Metastability sw0m(clock,, SW[0], sw0);
+	Metastability sw1m(clock,, SW[1], sw1);
+	Metastability sw2m(clock,, SW[2], sw2);
+	Metastability sw3m(clock,, SW[3], sw3);
+	Metastability key0m(clock,, KEY[0], key0);
+	Metastability key1m(clock,, KEY[1], key1);
+	Metastability key2m(clock,, KEY[2], key2);
+	
+	// Creates a reset signal when key 1 is pressed
+	wire resetInputSignal;  // **************metastability
+	UserInput_OneClock makeReset(clock,,key0, resetInputSignal);
+	
+	wire innerPort, outerPort; // 0 is open, 1 is closed
+	assign outerPort = sw2; // if switch on, outerport is closed
+	assign innerPort = sw3; // if switch on, innerport is closed
+	assign LEDR[2] = outerPort;
+	assign LEDR[3] = innerPort; // ADD MODULE
+	
+	reg pressureUp, pressureDown;								// what are these?
+	arriveAndDepartSignal(LEDR[0], LEDR[1], sw0, sw1, pressureUp, pressureDown, clock, resetInputSignal);
+	
+	// Creates a fillandPressurize signal when key 2 is pressed
+	wire fillandPressurizeSignal;
+	UserInput_OneClock makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
+	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, innerPort, outerport);
+	
+	// Creates an evacuation signal when key 3 is pressed
+	wire evacuateChamberSignal;
+	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
+	Evacuate e(clock, resetInputSignal, EvacuateChamberSignal, innerPort, outerPort,,);
 	
 endmodule
