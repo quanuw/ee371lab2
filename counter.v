@@ -11,6 +11,8 @@ module counter (clk, reset, counterSeconds, signal);
 	always @(posedge clk) begin
 		if (reset) begin
 			count <= 1'b0;
+		end else if (count == counterSeconds) begin
+			count <= 10'b0;
 		end else begin
 			count <= count + 10'b1;
 		end
