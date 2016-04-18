@@ -24,14 +24,14 @@ SW);
 	Metastability key2m(clock,, KEY[2], key2);
 	
 	// Creates a reset signal when key 1 is pressed
-	wire resetInputSignal;  // **************metastability
+	wire resetInputSignal;
 	UserInput_OneClock makeReset(clock,,key0, resetInputSignal);
 	
-	wire innerPort, outerPort; // 0 is open, 1 is closed
-	assign outerPort = sw2; // if switch on, outerport is closed
-	assign innerPort = sw3; // if switch on, innerport is closed
-	assign LEDR[2] = outerPort;
-	assign LEDR[3] = innerPort; // ADD MODULE
+	wire [1:0] ports; // 0 is open, 1 is closed
+	assign ports[0] = sw2; // if switch on, outerport is closed
+	assign ports[1] = sw3; // if switch on, innerport is closed
+	assign LEDR[2] = ports[0]; // outer
+	assign LEDR[3] = ports[1]; // innerPort // NEED LOGIC
 	
 	reg pressureUp, pressureDown;								// what are these?
 	arriveAndDepartSignal(LEDR[0], LEDR[1], sw0, sw1, pressureUp, pressureDown, clock, resetInputSignal);
@@ -39,11 +39,12 @@ SW);
 	// Creates a fillandPressurize signal when key 2 is pressed
 	wire fillandPressurizeSignal;
 	UserInput_OneClock makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
-	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, innerPort, outerport);
+	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, ports[1], ports[0]);
 	
 	// Creates an evacuation signal when key 3 is pressed
 	wire evacuateChamberSignal;
-	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
-	Evacuate e(clock, resetInputSignal, EvacuateChamberSignal, innerPort, outerPort,,);
+	reg ChamberIn;
+	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
+	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
 	
 endmodule
