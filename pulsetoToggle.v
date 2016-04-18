@@ -12,7 +12,11 @@ module pulsetoToggle(clock, reset, in, out);
 				end else begin
 					ns <= B;
 				end
-			B: ns <= B;
+			B: if (ps == A) begin
+					ns <= B;
+				end else begin
+					ns <= A;
+				end
 			default: ns <= 1'bx;
 		endcase
 		
