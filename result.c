@@ -18,19 +18,19 @@ int main() {
 	char* Cptr = &aC; // Declares pointer to a character variable
 	
 	oneI = *Iptr; // Assigns address of one integer variable to the pointer
-	printf("The value of the integer oneI is now &d.", oneI); // Prints out value of that integer
+	printf("The value of the integer oneI is now %d.\n", oneI); // Prints out value of that integer
 	twoI = *Iptr; // Repeated with the second integer
-	printf("The value of the integer twoI is now &d.", twoI);
+	printf("The value of the integer twoI is now %d.\n", twoI);
 	
 	oneF = *Fptr; // Repeated past steps with floats
-	printf("The value of the float oneF is &f.", oneF);
+	printf("The value of the float oneF is %f.\n", oneF);
 	twoF = *Fptr;
-	printf("The value of the float twoF is &f", twoF);
+	printf("The value of the float twoF is %f.\n", twoF);
 	
 	aC = *Cptr; // Repeated past steps with characters
-	printf("The value of the character aC is &c", aC);
+	printf("The value of the character aC is %c.\n", aC);
 	bC = *Cptr;
-	printf("The value of the character aC is &c", bC);
+	printf("The value of the character bC is %c.\n", bC);
 	
 	// Part Two
 	int A = 22; // Initialized integer variables as indicated in spec
@@ -49,7 +49,7 @@ int main() {
 	// result = ((A - B)) * (C + D)) / E = 5.555
 	result = ((*APtr - *BPtr) * (*CPtr + *DPtr)) / *EPtr; // results in 5, should we use float?
 	
-	printf("The result is equal to %d.", result);
+	printf("The result is equal to %d.\n", result);
 	return 0;
 }
 
