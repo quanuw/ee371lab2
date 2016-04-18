@@ -8,7 +8,7 @@ SW);
 	input [9:0] SW;
 	
 	wire [31:0] divided_clocks;
-	wire [3:0] CounterLights;
+	// wire [3:0] CounterLights;
 	
 	clock_divider dividclock(.clock(CLOCK_50), .divided_clocks(divided_clocks));
 	wire clock;
@@ -23,9 +23,9 @@ SW);
 	Metastability key1m(clock,, KEY[1], key1);
 	Metastability key2m(clock,, KEY[2], key2);
 	
-	// Creates a reset signal when key 1 is pressed
+	// Creates a reset signal when key 0 is pressed
 	wire resetInputSignal;  // **************metastability
-	UserInput_OneClock makeReset(clock,,key0, resetInputSignal);
+	UserInput_OneClock makeReset(.Clock(CLOCK_50), .key0(key0), .resetInputSignal(resetInputSignal));
 	
 	wire innerPort, outerPort; // 0 is open, 1 is closed
 	assign outerPort = sw2; // if switch on, outerport is closed
@@ -36,14 +36,27 @@ SW);
 	reg pressureUp, pressureDown;								// what are these?
 	arriveAndDepartSignal(LEDR[0], LEDR[1], sw0, sw1, pressureUp, pressureDown, clock, resetInputSignal);
 	
-	// Creates a fillandPressurize signal when key 2 is pressed
-	wire fillandPressurizeSignal;
-	UserInput_OneClock makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
-	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, innerPort, outerport);
+	// State of outer port (open or closed)
+	wire OPOpenClose, OPState;
+	OCPort IP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw2), .OpenClose(OPOpenClose));
+	Counter_1bit OuterPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(OPOpenClose), .Count(OPState));
+	assign LEDR[2] = OPstate;
 	
-	// Creates an evacuation signal when key 3 is pressed
+	// State of inner port (open or closed)
+	wire IPOpenClose, IPState;
+	OCPort IP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw3), .OpenClose(IPOpenClose));
+	Counter_1bit InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
+	assign LEDR[3] = IPState;
+	
+	// Creates a fillandPressurize signal when key 1 is pressed
+	wire fillandPressurizeSignal, FPState;
+	UserInput_OneClock makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
+	Counter_1bit Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(fillandPressurizeSignal), .Count(FPState));
+	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(key1), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .FandP(fillandPressurizeSignal));
+	
+	// Creates an evacuation signal when key 2 is pressed
 	wire evacuateChamberSignal;
 	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
-	Evacuate e(clock, resetInputSignal, EvacuateChamberSignal, innerPort, outerPort,,);
+	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
 	
 endmodule
