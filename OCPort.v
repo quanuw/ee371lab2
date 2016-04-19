@@ -49,6 +49,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				else begin
 				
 				ns = A;
+				OpenClose = 0;
 				
 				end 
 				

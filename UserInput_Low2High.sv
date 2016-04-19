@@ -1,4 +1,4 @@
-module userInput_Switch (Clock, Reset, in, out);
+module UserInput_Low2High (Clock, Reset, in, out);
 	input Clock, Reset, in;
 	output out;
 

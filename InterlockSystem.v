@@ -1,6 +1,6 @@
 `include "Counter_1bit.v"
 `include "OCPort.v"
-`include "UserInput_OneClock.v"
+`include "UserInput_High2Low.v"
 `include "Metastability.v"
 `include "clock_divider.v"
 
@@ -20,18 +20,19 @@ SW);
 	wire clock;
 	assign clock = divided_clocks[25];
 	wire sw0, sw1, sw2, sw3, key0, key1, key2;
-	Metastability sw0m(clock,, SW[0], sw0);
-	Metastability sw1m(clock,, SW[1], sw1);
-	Metastability sw2m(clock,, SW[2], sw2);
-	Metastability sw3m(clock,, SW[3], sw3);
-	Metastability key0m(clock,, KEY[0], key0);
-	Metastability key1m(clock,, KEY[1], key1);
-	Metastability key2m(clock,, KEY[2], key2);
+	Metastability sw0m(.clk(CLOCK_50), .rst(resetInputSignal), .press(SW[0]), .metaFree(sw0));
+	Metastability sw1m(.clk(CLOCK_50), .rst(resetInputSignal), .press(SW[1]), .metaFree(sw1));
+	Metastability sw2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(SW[2]), .metaFree(sw2));
+	Metastability sw3m(.clk(CLOCK_50), .rst(resetInputSignal), .press(SW[3]), .metaFree(sw3));
+	// Metastability key0m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[0]), .metaFree(key0));
+	Metastability key1m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[1]), .metaFree(key1));
+	Metastability key2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[2]), .metaFree(key2));
 	
-<<<<<<< HEAD
+// <<<<<<< HEAD
 	// Creates a reset signal when key 0 is pressed
 	wire resetInputSignal;  // **************metastability
-	UserInput_OneClock makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
+	assign resetInputSignal = !KEY[0];
+	// UserInput_High2Low makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
 	
 	/*
 	wire innerPort, outerPort; // 0 is open, 1 is closed
@@ -44,7 +45,7 @@ SW);
 =======
 	// Creates a reset signal when key 1 is pressed
 	wire resetInputSignal;
-	UserInput_OneClock makeReset(clock,,key0, resetInputSignal);
+	UserInput_High2Low makeReset(clock,,key0, resetInputSignal);
 	
 	wire [1:0] ports; // 0 is open, 1 is closed
 	assign ports[0] = sw2; // if switch on, outerport is closed
@@ -69,30 +70,30 @@ SW);
 	Counter_1bit InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
 	assign LEDR[3] = IPState;
 	
-<<<<<<< HEAD
+// <<<<<<< HEAD
 	/*
 	// Creates a fillandPressurize signal when key 1 is pressed
 	wire fillandPressurizeSignal, fiFPState;
-	UserInput_OneClock makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
+	UserInput_High2Low makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
 	Counter_1bit Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(fillandPressurizeSignal), .Count(FPState));
 	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(key1), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .FandP(fillandPressurizeSignal));
 =======
 	// Creates a fillandPressurize signal when key 2 is pressed
 	wire fillandPressurizeSignal;
-	UserInput_OneClock makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
+	UserInput_High2Low makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
 	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, ports[1], ports[0]);
 >>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
 	
 	// Creates an evacuation signal when key 2 is pressed
 	wire evacuateChamberSignal;
 <<<<<<< HEAD
-	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
+	UserInput_High2Low makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
 	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
-	*/
+	
 =======
 	reg ChamberIn;
 	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
 	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
 >>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
-	
+	*/
 endmodule
