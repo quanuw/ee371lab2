@@ -28,11 +28,17 @@ SW);
 	Metastability key1m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[1]), .metaFree(key1));
 	Metastability key2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[2]), .metaFree(key2));
 	
+<<<<<<< HEAD
 // <<<<<<< HEAD
 	// Creates a reset signal when key 0 is pressed
 	wire resetInputSignal;  // **************metastability
 	assign resetInputSignal = !KEY[0];
 	// UserInput_High2Low makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
+=======
+	// Creates a reset signal when key 0 is pressed
+	wire resetInputSignal;
+	UserInput_OneClock makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
+>>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
 	
 	/*
 	wire innerPort, outerPort; // 0 is open, 1 is closed
@@ -42,7 +48,7 @@ SW);
 	assign LEDR[3] = innerPort; // ADD MODULE
 	*/
 	/*
-=======
+
 	// Creates a reset signal when key 1 is pressed
 	wire resetInputSignal;
 	UserInput_High2Low makeReset(clock,,key0, resetInputSignal);
@@ -53,7 +59,7 @@ SW);
 	assign LEDR[2] = ports[0]; // outer
 	assign LEDR[3] = ports[1]; // innerPort // NEED LOGIC
 	
->>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
+
 	reg pressureUp, pressureDown;								// what are these?
 	arriveAndDepartSignal(LEDR[0], LEDR[1], sw0, sw1, pressureUp, pressureDown, clock, resetInputSignal);
 	*/
@@ -70,22 +76,26 @@ SW);
 	Counter_1bit InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
 	assign LEDR[3] = IPState;
 	
+<<<<<<< HEAD
 // <<<<<<< HEAD
+=======
+>>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
 	/*
 	// Creates a fillandPressurize signal when key 1 is pressed
 	wire fillandPressurizeSignal, fiFPState;
 	UserInput_High2Low makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
 	Counter_1bit Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(fillandPressurizeSignal), .Count(FPState));
 	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(key1), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .FandP(fillandPressurizeSignal));
-=======
+
 	// Creates a fillandPressurize signal when key 2 is pressed
 	wire fillandPressurizeSignal;
 	UserInput_High2Low makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
 	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, ports[1], ports[0]);
->>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
+
 	
 	// Creates an evacuation signal when key 2 is pressed
 	wire evacuateChamberSignal;
+<<<<<<< HEAD
 <<<<<<< HEAD
 	UserInput_High2Low makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
 	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
@@ -96,4 +106,15 @@ SW);
 	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
 >>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
 	*/
+=======
+
+	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
+	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
+	*/
+
+	reg ChamberIn;
+	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
+	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
+	
+>>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
 endmodule
