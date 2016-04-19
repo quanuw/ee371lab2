@@ -1,16 +1,12 @@
 // module for arrival, departure, inner port, and outer port
-
-`include "Metastability.v"
-`include "counter.v"
-
 module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
     departSwitch, clk, rst);
     output arriveSignal;
     output departSignal;
     input arriveSwitch;
     input departSwitch;
-    input pressureUp;
-    input pressureDown;
+    // input pressureUp;
+   //  input pressureDown;
     input clk, rst;
 
     reg departPS;
