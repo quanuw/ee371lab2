@@ -5,9 +5,9 @@ module DFlipFlop(q, qBar, D, clk, rst);
 	not n1 (qBar, q);
 		always@ (negedge rst or posedge clk)
 		begin
-			if(rst)
-				q = 0;
+			if(!rst)
+				q <= 0;
 			else
-				q = D;
+				q <= D;
 		end
 endmodule

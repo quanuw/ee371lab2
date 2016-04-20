@@ -25,7 +25,7 @@ module UserInput_High2Low (Clock, Reset, in, out);
 	
 	// DFFs
 	always @(posedge Clock)
-		if (Reset)
+		if (!Reset)
 			ps <= B;
 		else
 			ps <= ns;

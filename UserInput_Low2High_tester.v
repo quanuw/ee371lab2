@@ -1,6 +1,6 @@
 // This module will drive the inputs reset and clock to the 4 bit ripple down 
 // counter module for simulation in GTKWave
-module Metastability_tester(rst, clk, in);
+module UserInput_Low2High_tester(rst, clk, in);
 
 	output reg rst, clk, in;
 	
@@ -14,13 +14,10 @@ module Metastability_tester(rst, clk, in);
 
 	// Establishes reset for simulation of the making the user input high for once clock cycle
 	initial begin
-		rst <= 1;								@(posedge clk);
-		rst <= 0;								@(posedge clk);
 												@(posedge clk);
+		rst <= 0; in <= 1;					@(posedge clk);
 												@(posedge clk);
-		rst <= 1; in <= 1;						@(posedge clk);
-												@(posedge clk);
-												@(posedge clk);
+		rst<= 1; 			 				@(posedge clk);
 												@(posedge clk);
 		in <= 0;								@(posedge clk);
 												@(posedge clk);

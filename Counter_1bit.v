@@ -39,7 +39,7 @@ module Counter_1bit (Clock, Reset, Increase, Count);
 	
 	// DFFs
 	always @(posedge Clock)
-		if (Reset) begin
+		if (!Reset) begin
 			ps <= C;
 		end 	
 		else begin

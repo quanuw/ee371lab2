@@ -16,6 +16,8 @@ SW);
 	wire [31:0] divided_clocks;
 	// wire [3:0] CounterLights;
 	
+	assign resetInputSignal = KEY[0];
+	
 	clock_divider dividclock(.clock(CLOCK_50), .divided_clocks(divided_clocks));
 	wire clock;
 	assign clock = divided_clocks[25];
@@ -28,6 +30,7 @@ SW);
 	Metastability key1m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[1]), .metaFree(key1));
 	Metastability key2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[2]), .metaFree(key2));
 	
+	/*
 <<<<<<< HEAD
 // <<<<<<< HEAD
 	// Creates a reset signal when key 0 is pressed
@@ -76,11 +79,13 @@ SW);
 	Counter_1bit InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
 	assign LEDR[3] = IPState;
 	
+/*	
 <<<<<<< HEAD
 // <<<<<<< HEAD
 =======
 >>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
-	/*
+*/
+
 	// Creates a fillandPressurize signal when key 1 is pressed
 	wire fillandPressurizeSignal, fiFPState;
 	UserInput_High2Low makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
@@ -92,7 +97,7 @@ SW);
 	UserInput_High2Low makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
 	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, ports[1], ports[0]);
 
-	
+	/*
 	// Creates an evacuation signal when key 2 is pressed
 	wire evacuateChamberSignal;
 <<<<<<< HEAD
@@ -105,16 +110,17 @@ SW);
 	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
 	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
 >>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
-	*/
+	
 =======
 
 	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
 	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
-	*/
+	
 
 	reg ChamberIn;
 	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
 	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
 	
 >>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
+*/
 endmodule

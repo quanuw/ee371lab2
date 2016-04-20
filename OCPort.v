@@ -82,6 +82,13 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				ns = D;
 				OpenClose = 1;
 				
+				end 
+				
+				else begin
+				
+				ns = C;
+				OpenClose = 0;
+				
 				end
 			
 			end 
@@ -107,7 +114,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 		endcase
 	
 	always@(posedge Clock)
-		if(Reset) begin
+		if(!Reset) begin
 		
 			ps <= A;
 			
