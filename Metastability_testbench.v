@@ -10,8 +10,7 @@ module Metastability_testbench();
 	// Notice that the output clock and reset of the tester module are wires clk and rst in this module
 	Metastability_tester t(.clk(clk), .rst(rst), .in(in));
 	
-	// Calls the RippleDownCounter_4bit module as the device under test (dut)
-	// Notice that the clock and reset wire are wired to the input clk and rst of the 4 bit ripple down counter module  
+	// Calls the metastability module
 	Metastability dut( .clk(clk), .rst(rst), .press(in), .metaFree(out));
 	
 	// Dumps the results of the simulation into a .vcd file for view in GTKWave

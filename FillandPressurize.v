@@ -30,7 +30,7 @@ module FillandPressurize(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pr
 	assign FandP = (ps); 
 		
 	always@(posedge Clock)
-		if(Reset) begin
+		if(!Reset) begin
 		
 			ps <= A;
 			

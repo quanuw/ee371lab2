@@ -1,4 +1,4 @@
-module UserInput_OneClock (Clock, Reset, in, out);
+module UserInput_High2Low (Clock, Reset, in, out);
 	input Clock, Reset, in;
 	output out;
 	
@@ -25,7 +25,7 @@ module UserInput_OneClock (Clock, Reset, in, out);
 	
 	// DFFs
 	always @(posedge Clock)
-		if (Reset)
+		if (!Reset)
 			ps <= B;
 		else
 			ps <= ns;

@@ -1,41 +1,299 @@
-#! c:/iverilog-x86/bin/vvp
-:ivl_version "10.0 (stable)" "(v10_0)";
-:ivl_delay_selection "TYPICAL";
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
 :vpi_time_precision + 0;
 :vpi_module "system";
-:vpi_module "vhdl_sys";
 :vpi_module "v2005_math";
 :vpi_module "va_math";
-S_003b3f78 .scope module, "arriveAndDepartSignal" "arriveAndDepartSignal" 2 1;
+S_0034AD18 .scope module, "UserInput_High2Low_testbench" "UserInput_High2Low_testbench" 2 5;
  .timescale 0 0;
-    .port_info 0 /OUTPUT 1 "arriveSignal"
-    .port_info 1 /OUTPUT 1 "leaveSignal"
-    .port_info 2 /INPUT 1 "arriveSwitch"
-    .port_info 3 /INPUT 1 "leaveSwitch"
-    .port_info 4 /INPUT 1 "timer"
-    .port_info 5 /INPUT 1 "rst"
-o0065d864 .functor BUFZ 1, C4<z>; HiZ drive
-o0065d8f4 .functor BUFZ 1, C4<z>; HiZ drive
-L_003bfa08 .functor AND 1, o0065d864, o0065d8f4, C4<1>, C4<1>;
-o0065d8ac .functor BUFZ 1, C4<z>; HiZ drive
-o0065d8dc .functor BUFZ 1, C4<z>; HiZ drive
-L_003bfe60 .functor AND 1, o0065d8ac, o0065d8dc, C4<1>, C4<1>;
-L_003bfea8 .functor BUFZ 1, o0065d8f4, C4<0>, C4<0>, C4<0>;
-L_003bfef0 .functor BUFZ 1, o0065d8dc, C4<0>, C4<0>, C4<0>;
-v003bf7f0_0 .net "arriveSignal", 0 0, L_003bfa08;  1 drivers
-v003b4048_0 .net "arriveSwitch", 0 0, o0065d864;  0 drivers
-v003b40a0_0 .net "inPort", 0 0, L_003bfef0;  1 drivers
-v003b40f8_0 .net "leaveSignal", 0 0, L_003bfe60;  1 drivers
-v003bfca8_0 .net "leaveSwitch", 0 0, o0065d8ac;  0 drivers
-v003bfd00_0 .net "outPort", 0 0, L_003bfea8;  1 drivers
-v003bfd58_0 .net "pressureDown", 0 0, o0065d8dc;  0 drivers
-v003bfdb0_0 .net "pressureUp", 0 0, o0065d8f4;  0 drivers
-o0065d90c .functor BUFZ 1, C4<z>; HiZ drive
-v003bfe08_0 .net "rst", 0 0, o0065d90c;  0 drivers
-o0065d924 .functor BUFZ 1, C4<z>; HiZ drive
-v0068a870_0 .net "timer", 0 0, o0065d924;  0 drivers
+v0034FD80_0 .net "clk", 0 0, v0034E250_0; 1 drivers
+v0034FDD8_0 .net "in", 0 0, v0034E2A8_0; 1 drivers
+v0034FE30_0 .net "out", 0 0, L_005B5350; 1 drivers
+v005DDFF0_0 .net "rst", 0 0, v0034E300_0; 1 drivers
+S_0034B400 .scope module, "t" "UserInput_High2Low_tester" 2 11, 3 3, S_0034AD18;
+ .timescale 0 0;
+P_005A1584 .param/l "clk_PERIOD" 3 8, +C4<010>;
+v0034E250_0 .var "clk", 0 0;
+v0034E2A8_0 .var "in", 0 0;
+v0034E300_0 .var "rst", 0 0;
+S_0034B268 .scope module, "dut" "UserInput_High2Low" 2 15, 4 1, S_0034AD18;
+ .timescale 0 0;
+P_005B5204 .param/l "A" 4 10, +C4<0>;
+P_005B5218 .param/l "B" 4 10, +C4<01>;
+L_005B5318 .functor NOT 1, v0034CE28_0, C4<0>, C4<0>, C4<0>;
+L_005B5350 .functor AND 1, L_005B5318, v0034CD38_0, C4<1>, C4<1>;
+v00343850_0 .alias "Clock", 0 0, v0034FD80_0;
+v0034CC20_0 .alias "Reset", 0 0, v005DDFF0_0;
+v005B24B0_0 .net *"_s0", 0 0, L_005B5318; 1 drivers
+v0034CCE0_0 .alias "in", 0 0, v0034FDD8_0;
+v0034CD38_0 .var "ns", 0 0;
+v0034CDD0_0 .alias "out", 0 0, v0034FE30_0;
+v0034CE28_0 .var "ps", 0 0;
+E_005A1500 .event posedge, v00343850_0;
+E_005A1520 .event edge, v0034CCE0_0, v0034CE28_0;
+S_0034B378 .scope module, "userInput_FSM_testbench" "userInput_FSM_testbench" 5 33;
+ .timescale 0 0;
+P_005A14A4 .param/l "CLOCK_PERIOD" 5 40, +C4<01100100>;
+v005DE2B0_0 .var "Clock", 0 0;
+v005DE308_0 .var "Reset", 0 0;
+v005DE360_0 .var "in", 0 0;
+v005DE3B8_0 .net "out", 0 0, L_005B4E10; 1 drivers
+S_0034B488 .scope module, "dut" "userInput_FSM" 5 37, 5 1, S_0034B378;
+ .timescale 0 0;
+P_005B52E4 .param/l "A" 5 10, +C4<0>;
+P_005B52F8 .param/l "B" 5 10, +C4<01>;
+L_005B4DD8 .functor NOT 1, v005DE258_0, C4<0>, C4<0>, C4<0>;
+L_005B4E10 .functor AND 1, L_005B4DD8, v005DE1A8_0, C4<1>, C4<1>;
+v005DE048_0 .net "Clock", 0 0, v005DE2B0_0; 1 drivers
+v005DE0A0_0 .net "Reset", 0 0, v005DE308_0; 1 drivers
+v005DE0F8_0 .net *"_s0", 0 0, L_005B4DD8; 1 drivers
+v005DE150_0 .net "in", 0 0, v005DE360_0; 1 drivers
+v005DE1A8_0 .var "ns", 0 0;
+v005DE200_0 .alias "out", 0 0, v005DE3B8_0;
+v005DE258_0 .var "ps", 0 0;
+E_005A15E0 .event posedge, v005DE048_0;
+E_005A1560 .event edge, v005DE150_0, v005DE258_0;
+    .scope S_0034B400;
+T_0 ;
+    %set/v v0034E250_0, 1, 1;
+    %end;
+    .thread T_0;
+    .scope S_0034B400;
+T_1 ;
+    %delay 1, 0;
+    %load/v 8, v0034E250_0, 1;
+    %inv 8, 1;
+    %set/v v0034E250_0, 8, 1;
+    %jmp T_1;
+    .thread T_1;
+    .scope S_0034B400;
+T_2 ;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E300_0, 0, 0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 1;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E300_0, 0, 1;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 0;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 1;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 0;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 1;
+    %wait E_005A1500;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034E2A8_0, 0, 0;
+    %wait E_005A1500;
+    %wait E_005A1500;
+    %end;
+    .thread T_2;
+    .scope S_0034B268;
+T_3 ;
+    %wait E_005A1520;
+    %load/v 8, v0034CCE0_0, 1;
+    %cmpi/u 8, 0, 1;
+    %jmp/1 T_3.0, 6;
+    %cmpi/u 8, 1, 1;
+    %jmp/1 T_3.1, 6;
+    %set/v v0034CD38_0, 2, 1;
+    %jmp T_3.3;
+T_3.0 ;
+    %load/v 8, v0034CE28_0, 1;
+    %mov 9, 0, 1;
+    %cmpi/u 8, 0, 2;
+    %jmp/0xz  T_3.4, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CD38_0, 0, 1;
+    %jmp T_3.5;
+T_3.4 ;
+    %load/v 8, v0034CE28_0, 1;
+    %mov 9, 0, 2;
+    %cmpi/u 8, 1, 3;
+    %jmp/0xz  T_3.6, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CD38_0, 0, 1;
+T_3.6 ;
+T_3.5 ;
+    %jmp T_3.3;
+T_3.1 ;
+    %load/v 8, v0034CE28_0, 1;
+    %mov 9, 0, 1;
+    %cmpi/u 8, 0, 2;
+    %jmp/0xz  T_3.8, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CD38_0, 0, 0;
+    %jmp T_3.9;
+T_3.8 ;
+    %load/v 8, v0034CE28_0, 1;
+    %mov 9, 0, 2;
+    %cmpi/u 8, 1, 3;
+    %jmp/0xz  T_3.10, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CD38_0, 0, 0;
+T_3.10 ;
+T_3.9 ;
+    %jmp T_3.3;
+T_3.3 ;
+    %jmp T_3;
+    .thread T_3, $push;
+    .scope S_0034B268;
+T_4 ;
+    %wait E_005A1500;
+    %load/v 8, v0034CC20_0, 1;
+    %inv 8, 1;
+    %jmp/0xz  T_4.0, 8;
+    %movi 8, 1, 2;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CE28_0, 0, 8;
+    %jmp T_4.1;
+T_4.0 ;
+    %load/v 8, v0034CD38_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v0034CE28_0, 0, 8;
+T_4.1 ;
+    %jmp T_4;
+    .thread T_4;
+    .scope S_0034AD18;
+T_5 ;
+    %vpi_call 2 19 "$dumpfile", "UserInput_High2Low.vcd";
+    %vpi_call 2 20 "$dumpvars", 1'sb0, S_0034AD18;
+    %delay 150, 0;
+    %vpi_call 2 22 "$finish";
+    %end;
+    .thread T_5;
+    .scope S_0034B488;
+T_6 ;
+    %wait E_005A1560;
+    %load/v 8, v005DE150_0, 1;
+    %cmpi/u 8, 0, 1;
+    %jmp/1 T_6.0, 6;
+    %cmpi/u 8, 1, 1;
+    %jmp/1 T_6.1, 6;
+    %set/v v005DE1A8_0, 2, 1;
+    %jmp T_6.3;
+T_6.0 ;
+    %load/v 8, v005DE258_0, 1;
+    %mov 9, 0, 1;
+    %cmpi/u 8, 0, 2;
+    %jmp/0xz  T_6.4, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE1A8_0, 0, 1;
+    %jmp T_6.5;
+T_6.4 ;
+    %load/v 8, v005DE258_0, 1;
+    %mov 9, 0, 2;
+    %cmpi/u 8, 1, 3;
+    %jmp/0xz  T_6.6, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE1A8_0, 0, 1;
+T_6.6 ;
+T_6.5 ;
+    %jmp T_6.3;
+T_6.1 ;
+    %load/v 8, v005DE258_0, 1;
+    %mov 9, 0, 1;
+    %cmpi/u 8, 0, 2;
+    %jmp/0xz  T_6.8, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE1A8_0, 0, 0;
+    %jmp T_6.9;
+T_6.8 ;
+    %load/v 8, v005DE258_0, 1;
+    %mov 9, 0, 2;
+    %cmpi/u 8, 1, 3;
+    %jmp/0xz  T_6.10, 4;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE1A8_0, 0, 0;
+T_6.10 ;
+T_6.9 ;
+    %jmp T_6.3;
+T_6.3 ;
+    %jmp T_6;
+    .thread T_6, $push;
+    .scope S_0034B488;
+T_7 ;
+    %wait E_005A15E0;
+    %load/v 8, v005DE0A0_0, 1;
+    %jmp/0xz  T_7.0, 8;
+    %movi 8, 1, 2;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE258_0, 0, 8;
+    %jmp T_7.1;
+T_7.0 ;
+    %load/v 8, v005DE1A8_0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE258_0, 0, 8;
+T_7.1 ;
+    %jmp T_7;
+    .thread T_7;
+    .scope S_0034B378;
+T_8 ;
+    %set/v v005DE2B0_0, 1, 1;
+    %end;
+    .thread T_8;
+    .scope S_0034B378;
+T_9 ;
+    %delay 50, 0;
+    %load/v 8, v005DE2B0_0, 1;
+    %inv 8, 1;
+    %set/v v005DE2B0_0, 8, 1;
+    %jmp T_9;
+    .thread T_9;
+    .scope S_0034B378;
+T_10 ;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE308_0, 0, 1;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 1;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE308_0, 0, 0;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 0;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 1;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 0;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 1;
+    %wait E_005A15E0;
+    %ix/load 0, 1, 0;
+    %assign/v0 v005DE360_0, 0, 0;
+    %wait E_005A15E0;
+    %wait E_005A15E0;
+    %vpi_call 5 64 "$stop";
+    %end;
+    .thread T_10;
 # The file index is used to find the file name in the following table.
-:file_names 3;
+:file_names 6;
     "N/A";
     "<interactive>";
-    "arriveAndDepartSignal.v";
+    "UserInput_High2Low_testbench.v";
+    "./UserInput_High2Low_tester.v";
+    "./UserInput_High2Low.v";
+    "UserInput_High2Low";

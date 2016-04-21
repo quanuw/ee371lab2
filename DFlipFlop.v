@@ -6,8 +6,8 @@ module DFlipFlop(q, qBar, D, clk, rst);
 		always@ (negedge rst or posedge clk)
 		begin
 			if(!rst)
-				q = 0;
+				q <= 0;
 			else
-				q = D;
+				q <= D;
 		end
 endmodule

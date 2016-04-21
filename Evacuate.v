@@ -30,7 +30,7 @@ module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacua
 	assign Evacuation = (ps); 
 		
 	always@(posedge Clock)
-		if(Reset) begin
+		if(!Reset) begin
 		
 			ps <= A;
 			

@@ -1,16 +1,12 @@
 // module for arrival, departure, inner port, and outer port
-
-`include "Metastability.v"
-`include "counter.v"
-
 module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
     departSwitch, clk, rst);
     output arriveSignal;
     output departSignal;
     input arriveSwitch;
     input departSwitch;
-    input pressureUp;
-    input pressureDown;
+    // input pressureUp;
+   //  input pressureDown;
     input clk, rst;
 
     reg departPS;
@@ -20,35 +16,31 @@ module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
     parameter A = 0, B = 1;
     Metastability arrive(.clk(), .rst(), .press(arriveSwitch), .metaFree(arriveSignal));
     Metastability depart(.clk(), .rst(), .press(departSwitch), .metaFree(departSignal));
-
     counter pressureUpCount(.clk(), .reset(), .counterSeconds(10'b111), .signal(pressureUp));
     counter pressureDownCount(.clk(), .reset(), .counterSeconds(10'b111), .signal(pressureDown));
+
 
     assign arriveSignal = arrivePS;
     assign departSignal = departPS;
 
-    always @(posedge arriveSwitch or negedge arriveSwitch or posedge departSwitch
-        or negedge departSwitch)
+    always @(*)
         /*if (rst) begin
             departNS = 0;
             arriveNS = 0;
         end*/
         begin
-            if (arrivePS == 0 && pressureUp > 0 && pressureDown == 0) begin
+            if (arriveSwitch && pressureUp > 0 && pressureDown == 0) begin
                 arriveNS = 1;
             end
-            else if (arrivePS == 1 && pressureUp > 0) begin
+            else if (arrivePS && pressureUp > 0) begin
                 arriveNS = 1;
             end
-
-            if (departPS == 0 && pressureDown > 0 && pressureUp == 0) begin
+            if (departSwitch && pressureDown > 0 && pressureUp == 0) begin
                 departNS = 1;
             end
             else if (departPS && pressureDown > 0) begin
                 departNS = 1;
             end
-
-
             else begin
                 arriveNS = 0;
                 departNS = 0;
@@ -65,3 +57,4 @@ module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
             departPS <= departNS;
     	end
 endmodule
+>>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23

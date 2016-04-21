@@ -1,4 +1,4 @@
-module Counter_1bit_tester(Clock, Reset, Increase);
+module arriveAndDepartSignal_tester(Clock, Reset, Increase);
 	output reg Clock, Reset, Increase;
 	
 	// Set up the clock.
@@ -12,9 +12,9 @@ module Counter_1bit_tester(Clock, Reset, Increase);
 	// Set up the inputs to the design. Each line is a clock cycle.
 	initial begin
 										@(posedge Clock);
-		Reset <= 0;						@(posedge Clock);			
+		Reset <= 1;						@(posedge Clock);			
 										@(posedge Clock);
-		Reset <= 1; Increase <= 1;		@(posedge Clock);
+		Reset <= 0; Increase <= 1;		@(posedge Clock);
 		Increase <= 0;					@(posedge Clock);
 										@(posedge Clock);
 		Increase <= 1;					@(posedge Clock);
