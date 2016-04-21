@@ -1,5 +1,5 @@
-module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
-	input Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated;
+module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressurized, Evacuated, Evacuation);
+	input Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressurized, Evacuated;
 	output Evacuation;
 	
 	parameter A = 0, B = 1;
@@ -20,7 +20,7 @@ module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacua
 			
 			B: begin 
 			
-				if (!Evacuated && begin_Evacuation && OuterClosed) ns = B;
+				if (!Evacuated && Pressurized && begin_Evacuation && OuterClosed) ns = B;
 				else ns = A;
 				
 			end 

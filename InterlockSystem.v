@@ -1,8 +1,15 @@
-`include "Counter_1bit.v"
-`include "OCPort.v"
-`include "UserInput_High2Low.v"
 `include "Metastability.v"
 `include "clock_divider.v"
+`include "UserInput_High2Low.v"
+`include "UserInput_Low2High.v"
+`include "Counter_1bit.v"
+`include "OCPort.v"
+`include "FillandPressurize.v"
+`include "Evacuate.v"
+`include "countdown_FP.v"
+`include "countdown_Evacuate.v"
+
+
 
 module InterlockSystem(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW);
@@ -87,16 +94,25 @@ SW);
 */
 
 	// Creates a fillandPressurize signal when key 1 is pressed
-	wire fillandPressurizeSignal, fiFPState;
-	UserInput_High2Low makeFP(.Clock, .resetInputSignal, .key1, .fillandPressurizeSignal);
+	wire FPKey, countdownSignalFP, beginFPSignal, fillandPressurizeSignal, FPSignalOneClock, FPState;
+	UserInput_High2Low keyFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key1), .out(FPKey));
+	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(FPKey), .InnerClosed(IPState), .OuterClosed(OPState), .Evacuated(EVState), .Pressurized(FPState), .FandP(countdownSignalFP));
+	// UserInput_High2Low beginFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(countdownSignalFP), .out(beginFPSignal));
+	countdown_FP makeFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(countdownSignalFP), .pressurized(fillandPressurizeSignal));
+	// UserInput_Low2High changeFPState(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(fillandPressurizeSignal), .out(FPSignalOneClock));
 	Counter_1bit Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(fillandPressurizeSignal), .Count(FPState));
-	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(key1), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .FandP(fillandPressurizeSignal));
+	assign LEDR[5] = FPState;
+	
 
-	// Creates a fillandPressurize signal when key 2 is pressed
-	wire fillandPressurizeSignal;
-	UserInput_High2Low makeFP(clock, resetInputSignal, key1, fillandPressurizeSignal);
-	FillandPressurize fP(clock, resetInputSignal, fillandPressurizeSignal, ports[1], ports[0]);
-
+	// Creates an evacuate signal when key 2 is pressed
+	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, EVSignalOneClock, EVState;
+	UserInput_High2Low keyEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key2), .out(EVKey));
+	Evacuate e(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_Evacuation(key2), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .Evacuated(EVState), .Evacuation(countdownSignalEV));
+	// UserInput_High2Low beginEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(countdownSignalEV), .out(beginEVSignal));
+	countdown_Evacuate makeEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(beginEVSignal), .evacuated(evacuateSignal));
+	// UserInput_High2Low makeEVCountdown(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(evacuateSignal), .out(EVSignalOneClock));
+	Counter_1bit Evacuated(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(evacuateSignal), .Count(EVState));
+	assign LEDR[6] = EVState;
 	/*
 	// Creates an evacuation signal when key 2 is pressed
 	wire evacuateChamberSignal;

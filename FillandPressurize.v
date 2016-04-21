@@ -1,5 +1,5 @@
-module FillandPressurize(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pressurized, FandP);
-	input Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pressurized;
+module FillandPressurize(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Evacuated, Pressurized, FandP);
+	input Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Evacuated, Pressurized;
 	output FandP;
 	
 	parameter A = 0, B = 1;
@@ -20,7 +20,7 @@ module FillandPressurize(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pr
 			
 			B: begin 
 			
-				if (!Pressurized && begin_FandP && InnerClosed) ns = B;
+				if (!Pressurized && Evacuated && begin_FandP && InnerClosed) ns = B;
 				else ns = A;
 				
 			end 

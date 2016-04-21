@@ -5,18 +5,25 @@
 // counterSeconds == 480 for 8 minutes
 // Counter counts down the number of seconds given
 // then returns 1 forever after that
-module counter (clk, reset, counterSeconds, signal);
-	input clk, reset;
+module counter (clk, reset, beginCount, counterSeconds, signal);
+	input clk, reset, beginCount;
 	input [9:0] counterSeconds;
-	output wire signal;
-	reg count;
+	output wire [9:0] signal;
+	reg [9:0] count;
+	
 	always @(posedge clk) begin
-		if (reset) begin
+		if (!reset) begin
 			count <= counterSeconds;
-		end else if (count != 10'b0) begin
-			count <= count - 10'b1;
+		end else if (beginCount) begin
+			if(count != 10'b0) begin
+				while(count != 10'b0) begin
+					count <= count - 10'b1;
+				end
+			end
+		end else if (count == 10'b0) begin
+			count <= counterSeconds;
 		end
 	end
-	assign signal = count == 10'b0;
+	assign signal = count;
 endmodule
 				

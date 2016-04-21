@@ -3,8 +3,9 @@
 
 module FillandPressurize_testbench();
 
-	wire Clock, Reset, InnerClosed, begin_FandP, OuterClosed, Pressurized;
-	wire FandP;
+	wire Clock, Reset, countdown;
+	wire pressurized;
+	wire [2:0] count;
 	
 	// Calls the 1 bit counter tester module 
 	// Notice that the output Clock, Reset, Increase of the tester module are wires Clock, Reset, Increase in this module

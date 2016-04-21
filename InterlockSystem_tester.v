@@ -37,8 +37,41 @@ module InterlockSystem_tester(Clock, SW0, SW1, SW2, SW3, Key0, Key1, Key2);
 																				@(posedge Clock);
 																				@(posedge Clock);
 		SW3 <= 0;																@(posedge Clock);
-		
-		
+																				@(posedge Clock);
+		SW3 <= 1;																@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+		Key1 <= 0; 																@(posedge Clock);
+																				@(posedge Clock);																			
+																				@(posedge Clock);
+		Key1 <= 1; 																@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+		Key1 <= 0; 																@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+		Key2 <= 0; 																@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+		Key2 <= 1; 																@(posedge Clock);
+																				@(posedge Clock);																		
+																				@(posedge Clock);
+		Key2 <= 0;																@(posedge Clock);
+																				@(posedge Clock);	
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+																				@(posedge Clock);
+	
 
 	end
 endmodule
