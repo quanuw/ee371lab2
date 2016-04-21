@@ -12,17 +12,17 @@ module counter (clk, reset, counterSeconds, start, signal);
 	reg [9:0] count;
 	reg go;
 	always @(posedge clk) begin
-		if (reset) begin
-			go <= 1'b0;
-		end else if (start) begin
-			go <= 1'b1;
-		end
-	end
-	always @(posedge clk) begin
-		if (reset) begin
+		if (!reset) begin
 			count <= counterSeconds;
 		end else if (count != 10'b0 && go) begin
 			count <= count - 10'b1;
+		end
+	end
+	always @(posedge clk) begin
+		if (!reset) begin
+			go <= 1'b0;
+		end else if (start) begin
+			go <= 1'b1;
 		end
 	end
 	assign signal = count == 10'b0;

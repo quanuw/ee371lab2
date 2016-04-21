@@ -11,14 +11,11 @@ module counter_tester(Clock, Reset, Start);
 	
 	// Set up the inputs to the design. Each line is a clock cycle.
 	initial begin
-		Reset <= 0;					@(posedge Clock);			
-										@(posedge Clock);
-		Reset <= 1;					@(posedge Clock);
-										@(posedge Clock);
-		Reset <= 0;					@(posedge Clock);	
+		Reset <= 1;					@(posedge Clock);			
+		Reset <= 0;					@(posedge Clock);
+		Reset <= 1;					@(posedge Clock);	
 		Start <= 0;					@(posedge Clock);
 		Start <= 1;					@(posedge Clock);
-										@(posedge Clock);
 		Start <= 0;					@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
