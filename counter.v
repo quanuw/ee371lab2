@@ -14,11 +14,11 @@ module counter (clk, reset, counterSeconds, start, signal);
 		if (reset) begin
 			go <= 1'b0;
 		end else if (start) begin
-			go <= ~go;
+			go <= 1'b1;
 		end
 	end
 	always @(posedge clk) begin
-		if (reset) begin
+		if (reset || start) begin
 			count <= counterSeconds;
 		end else if (count != 10'b0 && go) begin
 			count <= count - 10'b1;
