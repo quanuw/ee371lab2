@@ -1,5 +1,5 @@
-module OCPort(Clock, Reset, SwitchFlip, OpenClose);
-	input Clock, Reset, SwitchFlip;
+module OCPort(Clock, Reset, SwitchFlip, OpenClose, EVState);
+	input Clock, Reset, SwitchFlip, EVState;
 	output reg OpenClose;
 	/*
 	parameter A = 0, B = 1;
@@ -42,7 +42,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				if(SwitchFlip) begin
 				
 				ns = B;
-				OpenClose = 1;
+				OpenClose = 1 && !EVState;
 				
 				end
 				
@@ -69,7 +69,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				else begin
 				
 				ns = D;
-				OpenClose = 1;
+				OpenClose = 1 && !EVState;;
 				
 				end
 				
@@ -80,7 +80,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				if(!SwitchFlip) begin
 				
 				ns = D;
-				OpenClose = 1;
+				OpenClose = 1 && !EVState;;
 				
 				end 
 				
@@ -98,7 +98,7 @@ module OCPort(Clock, Reset, SwitchFlip, OpenClose);
 				if(SwitchFlip) begin
 				
 				ns = B;
-				OpenClose = 1;
+				OpenClose = 1 && !EVState;;
 				
 				end
 				

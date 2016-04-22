@@ -1,5 +1,5 @@
-module OCPort_tester(Clock, Reset, SwitchFlip);
-	output reg Clock, Reset, SwitchFlip;
+module OCPort_tester(Clock, Reset, SwitchFlip, EVState);
+	output reg Clock, Reset, SwitchFlip, EVState;
 	
 	// Set up the clock.
 	parameter CLOCK_PERIOD=2;
@@ -12,6 +12,31 @@ module OCPort_tester(Clock, Reset, SwitchFlip);
 	// Set up the inputs to the design. Each line is a clock cycle.
 	initial begin
 										@(posedge Clock);
+		EVState <= 0;					@(posedge Clock);
+		Reset <= 0;						@(posedge Clock);			
+										@(posedge Clock);
+		Reset <= 1; 					@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip <= 0;				@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip	<= 1;				@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip <= 0;				@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip	<= 1;				@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip <= 0;				@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+		SwitchFlip <= 1;				@(posedge Clock);
+		SwitchFlip <= 0;				@(posedge Clock);
+										@(posedge Clock);
+										@(posedge Clock);
+		EVState <= 1;					@(posedge Clock);
 		Reset <= 0;						@(posedge Clock);			
 										@(posedge Clock);
 		Reset <= 1; 					@(posedge Clock);
