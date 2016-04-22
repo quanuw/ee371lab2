@@ -1,54 +1,53 @@
+`include"Metastability.v"
+`include"counter.v"
 // module for arrival, departure, inner port, and outer port
 module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
-    departSwitch, clk, rst);
+                             departSwitch, clk, rst);
     output arriveSignal;
     output departSignal;
     input arriveSwitch;
     input departSwitch;
-    // input pressureUp;
-   //  input pressureDown;
+    input pressureUp;
+    input pressureDown;
     input clk, rst;
 
     reg departPS;
     reg departNS;
     reg arrivePS;
     reg arriveNS;
-    parameter A = 0, B = 1;
-    Metastability arrive(.clk(), .rst(), .press(arriveSwitch), .metaFree(arriveSignal));
+
+    Metastability arrive(.clk(), .rst(), .press(arriveSwitch), .metaFree(arriveSignal)); // prevent metastability from the signals
     Metastability depart(.clk(), .rst(), .press(departSwitch), .metaFree(departSignal));
-    counter pressureUpCount(.clk(), .reset(), .counterSeconds(10'b111), .signal(pressureUp));
-    counter pressureDownCount(.clk(), .reset(), .counterSeconds(10'b111), .signal(pressureDown));
+
+    counter pressureUpCount(.clk(clk), .reset(rst), .counterSeconds(10'b111), .signal(pressureUp)); // interface with counters
+    counter pressureDownCount(.clk(clk), .reset(rst), .counterSeconds(10'b111), .signal(pressureDown));
 
 
-    assign arriveSignal = arrivePS;
+    assign arriveSignal = arrivePS; // assign the signals to present states
     assign departSignal = departPS;
 
     always @(*)
-        /*if (rst) begin
-            departNS = 0;
-            arriveNS = 0;
-        end*/
         begin
-            if (arriveSwitch && pressureUp > 0 && pressureDown == 0) begin
+            if (arriveSwitch && pressureUp == 0) begin // if switch is enabled and pressureUp counter is greater than 0 && pressureDown counter is 0
                 arriveNS = 1;
             end
-            else if (arrivePS && pressureUp > 0) begin
+            else if (arrivePS) begin // if present state is on and pressureUp counter is greater than 0 next
                 arriveNS = 1;
             end
-            if (departSwitch && pressureDown > 0 && pressureUp == 0) begin
+            if (departSwitch && pressureDown > 0 && pressureUp == 0) begin // if switch is enabled and pressureDown counter is greater than 0 && pressureUp counter is 0
                 departNS = 1;
             end
-            else if (departPS && pressureDown > 0) begin
+            else if (departPS && pressureDown > 0) begin // if present state is on and pressureDown counter is greater than o
                 departNS = 1;
             end
-            else begin
+            else begin // else turn off both signals
                 arriveNS = 0;
                 departNS = 0;
             end
         end
 
     always@(posedge clk)
-    	if(rst) begin
+    	if(!rst) begin
     		arrivePS <= 0;
             departPS <= 0;
     	end
@@ -57,4 +56,3 @@ module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
             departPS <= departNS;
     	end
 endmodule
->>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23
