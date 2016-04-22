@@ -1,5 +1,5 @@
-module FillandPressurize_tester(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pressurized);
-	output reg Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pressurized;
+module FillandPressurize_tester(Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Evacuated, Pressurized);
+	output reg Clock, Reset, begin_FandP, InnerClosed, OuterClosed, Pressurized, Evacuated;
 	
 	// Set up the clock.
 	parameter CLOCK_PERIOD=2;
@@ -40,11 +40,10 @@ module FillandPressurize_tester(Clock, Reset, begin_FandP, InnerClosed, OuterClo
 										@(posedge Clock);
 										@(posedge Clock);
 		OuterClosed <= 1;				@(posedge Clock);
-		Pressurized <= 1;				@(posedge Clock);
+		Evacuated <= 1;					@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
-		begin_FandP <= 1;				@(posedge Clock);	
 										@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
