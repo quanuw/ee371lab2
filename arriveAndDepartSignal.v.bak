@@ -57,4 +57,4 @@ module arriveAndDepartSignal(arriveSignal, departSignal, arriveSwitch,
             departPS <= departNS;
     	end
 endmodule
-
+>>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23

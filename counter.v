@@ -5,6 +5,7 @@
 // counterSeconds == 480 for 8 minutes
 // Counter counts down the number of seconds given
 // then returns 1 forever after that
+/*
 <<<<<<< HEAD
 module counter (clk, reset, beginCount, counterSeconds, signal);
 	input clk, reset, beginCount;
@@ -27,6 +28,7 @@ module counter (clk, reset, beginCount, counterSeconds, signal);
 	end
 	assign signal = count;
 =======
+*/
 module counter (clk, reset, counterSeconds, start, signal);
 	input clk, reset, start;
 	input [9:0] counterSeconds;
@@ -48,6 +50,6 @@ module counter (clk, reset, counterSeconds, start, signal);
 		end
 	end
 	assign signal = count == 10'b0;
->>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23
+// >>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23
 endmodule
 				

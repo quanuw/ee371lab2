@@ -1,4 +1,4 @@
-`include "DFlipFlop.v"
+// `include "MetastabilityDFlipFlop.v"
 
 module Metastability ( clk, rst, press, metaFree);
 	input clk, rst, press;
@@ -7,7 +7,7 @@ module Metastability ( clk, rst, press, metaFree);
 	wire d1_Out;
 	
 	// Fixes Metastability by putting signal through two D flip-flops 
-	DFlipFlop d1(.q(d1_Out), .qBar(), .D(press), .clk(clk), .rst(rst));
-	DFlipFlop d2(.q(metaFree), .qBar(), .D(d1_Out), .clk(clk), .rst(rst));
+	MetastabilityDFlipFlop d1(.q(d1_Out), .qBar(), .D(press), .rst(rst), .clk(clk));
+	MetastabilityDFlipFlop d2(.q(metaFree), .qBar(), .D(d1_Out), .rst(rst), .clk(clk));
 	
 endmodule 

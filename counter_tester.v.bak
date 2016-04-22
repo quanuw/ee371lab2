@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
 module counter_tester(Clock, Reset, beginCount, counterSeconds);
 	output reg Clock, Reset, Increase, beginCount;
 	output reg [9:0] counterSeconds;
