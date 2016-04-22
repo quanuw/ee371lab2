@@ -1,4 +1,4 @@
-// `include "MetastabilityDFlipFlop.v"
+`include "MetastabilityDFlipFlop.v"
 
 module Metastability ( clk, rst, press, metaFree);
 	input clk, rst, press;

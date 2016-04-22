@@ -29,11 +29,11 @@ module counter (clk, reset, beginCount, counterSeconds, signal);
 	assign signal = count;
 =======
 */
-module counter (clk, reset, counterSeconds, start, signal);
+module counter (clk, reset, counterSeconds, start, signal, count);
 	input clk, reset, start;
 	input [9:0] counterSeconds;
 	output wire signal;
-	reg [9:0] count;
+	output wire [9:0] count;
 	reg go;
 	always @(posedge clk) begin
 		if (!reset || start) begin
