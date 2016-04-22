@@ -2,7 +2,7 @@
 // 4/21/16
 // result.c
 
-#include <stdio.h>
+#include <stdio.h> // for printf function
 int main() { 
 	// ----------------Part One----------------
 	int oneI = 1; // Declares two integer variables
