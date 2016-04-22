@@ -1,5 +1,5 @@
-module Evacuate_tester(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated);
-	output reg Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated;
+module Evacuate_tester(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressurized, Evacuated);
+	output reg Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressurized, Evacuated;
 	
 	// Set up the clock.
 	parameter CLOCK_PERIOD=2;
@@ -36,7 +36,7 @@ module Evacuate_tester(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed,
 										@(posedge Clock);
 										@(posedge Clock);
 		begin_Evacuation <= 1;			@(posedge Clock);
-										@(posedge Clock);
+		Pressurized <= 1;				@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
 		OuterClosed <= 1;				@(posedge Clock);
@@ -44,7 +44,7 @@ module Evacuate_tester(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed,
 										@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);
-		begin_Evacuation <= 1;			@(posedge Clock);	
+										@(posedge Clock);	
 										@(posedge Clock);
 										@(posedge Clock);
 										@(posedge Clock);

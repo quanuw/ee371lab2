@@ -1,4 +1,4 @@
-module Counter_1bit (Clock, Reset, Increase, Count);
+module Counter_1bit_Start0 (Clock, Reset, Increase, Count);
 	input Clock, Reset, Increase;
 
 	// Output scoreKeeper is 3 bit number that should send to displayVictor module
@@ -10,8 +10,6 @@ module Counter_1bit (Clock, Reset, Increase, Count);
 	
 	// State encoding.
 	parameter A = 0, B = 1, C = 0;
-	
-	initial ps = C;
 	
 	// Next State logic
 	always @(*) begin
@@ -40,7 +38,7 @@ module Counter_1bit (Clock, Reset, Increase, Count);
 	// DFFs
 	always @(posedge Clock)
 		if (!Reset) begin
-			ps <= C;
+			ps <= 0;
 		end 	
 		else begin
 			ps <= ns;

@@ -1,6 +1,6 @@
-module countdown_FP(Clock, Reset, countdown, pressurized);
+module countdown_FP(Clock, Reset, countdown, devacuated, pressurized);
 	input Clock, Reset, countdown;
-	output reg pressurized;
+	output reg pressurized, devacuated;
 	
 	parameter A = 3'b111, B = 3'b110, C = 3'b101, D = 3'b100, E = 3'b011, F = 3'b010, G = 3'b001, H = 3'b000;
 	
@@ -16,11 +16,13 @@ module countdown_FP(Clock, Reset, countdown, pressurized);
 				if(countdown) begin
 				ns = B;
 				pressurized = 0;
+				devacuated = 0;
 				end 
 				
 				else begin
 				ns = A;
 				pressurized = 0;
+				devacuated = 0;
 				end
 		
 			end 
@@ -28,41 +30,49 @@ module countdown_FP(Clock, Reset, countdown, pressurized);
 			B: begin 
 			ns = C;	
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			C: begin 
 			ns = D;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			D: begin 
 			ns = E;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			E: begin 
 			ns = F;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			F: begin 
 			ns = G;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			F: begin 
 			ns = G;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			G: begin 
 			ns = H;
 			pressurized = 0;
+			devacuated = 0;
 			end 
 			
 			H: begin 
 			ns = A;
 			pressurized = 1; 
+			devacuated = 1;
 			end 
 		
 		endcase

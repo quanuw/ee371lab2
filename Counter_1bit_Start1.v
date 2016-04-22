@@ -1,4 +1,4 @@
-module EVState (Clock, Reset, Increase, Count);
+module Counter_1bit_Start1 (Clock, Reset, Increase, Count);
 	input Clock, Reset, Increase;
 
 	// Output scoreKeeper is 3 bit number that should send to displayVictor module
@@ -8,7 +8,8 @@ module EVState (Clock, Reset, Increase, Count);
 	reg ps; // Present State
 	reg ns; // Next State
 	
-	initial ps = 1;
+	// State encoding.
+	parameter A = 0, B = 1, C = 0;
 	
 	// Next State logic
 	always @(*) begin

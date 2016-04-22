@@ -4,11 +4,37 @@ module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressu
 	
 	parameter A = 0, B = 1;
 	
-	reg ps;
-	reg ns;
+	reg psDepressurize;
+	reg nsDepressurize;
+	
+	reg psEvacuation;
+	reg nsEvacuation;
 	
 	always@(*)
-	
+		
+		case (Evacuated)
+		
+			A: begin 
+			
+				if (Pressurized && begin_Evacuation && OuterClosed && InnerClosed) begin 
+				nsEvacuation = B;
+				// nsDepressurize = B;
+				end 
+				else begin
+				nsEvacuation = A;
+				// nsDepressurize = A;
+				end
+			
+			end 
+			
+			
+			B: begin 
+			
+				nsEvacuation = A;
+				// nsDepressurize = A;
+				
+			end 
+		/*
 		case (InnerClosed)
 		
 			A: begin 
@@ -24,21 +50,25 @@ module Evacuate(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Pressu
 				else ns = A;
 				
 			end 
+		*/
 		
 		endcase
 		
-	assign Evacuation = (ps); 
-		
+	assign Evacuation = (psEvacuation); 
+	// assign Depressurize = (psDepressurize);
+	
 	always@(posedge Clock)
 		if(!Reset) begin
 		
-			ps <= A;
+			psEvacuation <= A;
+			// psDepressurize <= A;
 			
 		end 
 				
 		else begin
 		
-			ps <= ns;
+			psEvacuation <= nsEvacuation;
+			// psDepressurize <= nsDepressurize;
 			
 		end 
 	

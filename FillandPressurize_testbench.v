@@ -3,17 +3,16 @@
 
 module FillandPressurize_testbench();
 
-	wire Clock, Reset, countdown;
-	wire pressurized;
-	wire [2:0] count;
+	wire Clock, Reset, InnerClosed, begin_Evacuation, OuterClosed, Pressurized, Evacuated;
+	wire FandP, Evacuate;
 	
 	// Calls the 1 bit counter tester module 
 	// Notice that the output Clock, Reset, Increase of the tester module are wires Clock, Reset, Increase in this module
-	FillandPressurize_tester t(.Clock(Clock), .Reset(Reset), .begin_FandP(begin_FandP), .InnerClosed(InnerClosed), .OuterClosed(OuterClosed), .Pressurized(Pressurized));
+	FillandPressurize_tester t(.Clock(Clock), .Reset(Reset), .begin_FandP(begin_FandP), .InnerClosed(InnerClosed), .OuterClosed(OuterClosed), .Evacuated(Evacuated), .Pressurized(Pressurized));
 	
 	// Calls the 1 bit counter module as the device under test (dut)
 	// Notice that the Clock, Reset, and Increase are wired to the input of the 1 bit counter module  
-	FillandPressurize dut(.Clock(Clock), .Reset(Reset), .begin_FandP(begin_FandP), .InnerClosed(InnerClosed), .OuterClosed(OuterClosed), .Pressurized(Pressurized), .FandP(FandP));
+	FillandPressurize dut(.Clock(Clock), .Reset(Reset), .begin_FandP(begin_FandP), .InnerClosed(InnerClosed), .OuterClosed(OuterClosed), .Evacuated(Evacuated), .Pressurized(Pressurized), .Evacuate(Evacuate), .FandP(FandP));
 	
 	// Dumps the results of the simulation into a .vcd file for view in GTKWave
 	initial begin 

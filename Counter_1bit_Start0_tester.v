@@ -1,4 +1,4 @@
-module Counter_1bit_tester(Clock, Reset, Increase);
+module Counter_1bit_Start0_tester(Clock, Reset, Increase);
 	output reg Clock, Reset, Increase;
 	
 	// Set up the clock.

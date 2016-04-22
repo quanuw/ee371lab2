@@ -1,15 +1,16 @@
+/*
 `include "Metastability.v"
 `include "clock_divider.v"
 `include "UserInput_High2Low.v"
 `include "UserInput_Low2High.v"
-`include "Counter_1bit.v"
+`include "Counter_1bit_Start1.v"
+`include "Counter_1bit_Start0.v"
 `include "OCPort.v"
 `include "FillandPressurize.v"
 `include "Evacuate.v"
 `include "countdown_FP.v"
 `include "countdown_Evacuate.v"
-
-
+*/
 
 module InterlockSystem(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW);
@@ -21,7 +22,6 @@ SW);
 	input [9:0] SW;
 	
 	wire [31:0] divided_clocks;
-	// wire [3:0] CounterLights;
 	
 	assign resetInputSignal = KEY[0];
 	
@@ -37,106 +37,42 @@ SW);
 	Metastability key1m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[1]), .metaFree(key1));
 	Metastability key2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[2]), .metaFree(key2));
 	
-	/*
-<<<<<<< HEAD
-// <<<<<<< HEAD
-	// Creates a reset signal when key 0 is pressed
-	wire resetInputSignal;  // **************metastability
-	assign resetInputSignal = !KEY[0];
-	// UserInput_High2Low makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
-=======
-	// Creates a reset signal when key 0 is pressed
-	wire resetInputSignal;
-	UserInput_OneClock makeReset(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key0), .out(resetInputSignal));
->>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
-	
-	/*
-	wire innerPort, outerPort; // 0 is open, 1 is closed
-	assign outerPort = sw2; // if switch on, outerport is closed
-	assign innerPort = sw3; // if switch on, innerport is closed
-	assign LEDR[2] = outerPort;
-	assign LEDR[3] = innerPort; // ADD MODULE
-	*/
-	/*
-
-	// Creates a reset signal when key 1 is pressed
-	wire resetInputSignal;
-	UserInput_High2Low makeReset(clock,,key0, resetInputSignal);
-	
-	wire [1:0] ports; // 0 is open, 1 is closed
-	assign ports[0] = sw2; // if switch on, outerport is closed
-	assign ports[1] = sw3; // if switch on, innerport is closed
-	assign LEDR[2] = ports[0]; // outer
-	assign LEDR[3] = ports[1]; // innerPort // NEED LOGIC
-	
-
-	reg pressureUp, pressureDown;								// what are these?
-	arriveAndDepartSignal(LEDR[0], LEDR[1], sw0, sw1, pressureUp, pressureDown, clock, resetInputSignal);
-	*/
-	
 	// State of outer port (open or closed)
 	wire OPOpenClose, OPState;
 	OCPort OP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw2), .OpenClose(OPOpenClose));
-	Counter_1bit OuterPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(OPOpenClose), .Count(OPState));
+	Counter_1bit_Start1 OuterPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(OPOpenClose), .Count(OPState));
 	assign LEDR[2] = OPState;
 	
 	// State of inner port (open or closed)
 	wire IPOpenClose, IPState;
 	OCPort IP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw3), .OpenClose(IPOpenClose));
-	Counter_1bit InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
+	Counter_1bit_Start1 InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
 	assign LEDR[3] = IPState;
 	
-/*	
-<<<<<<< HEAD
-// <<<<<<< HEAD
-=======
->>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
-*/
-
 	// Creates a fillandPressurize signal when key 1 is pressed
-	wire FPKey, countdownSignalFP, beginFPSignal, fillandPressurizeSignal, FPSignalOneClock, FPState;
+	wire FPKey, countdownSignalFP, beginFPSignal, fillandPressurizeSignal, FPSignalOneClock, FPState, devacuate, DevacuateOneClock, FPIncrement;
+	or incrementFPState(FPIncrement, fillandPressurizeSignal, Depressurize);
+	
 	UserInput_High2Low keyFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key1), .out(FPKey));
 	FillandPressurize fP(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_FandP(FPKey), .InnerClosed(IPState), .OuterClosed(OPState), .Evacuated(EVState), .Pressurized(FPState), .FandP(countdownSignalFP));
 	// UserInput_High2Low beginFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(countdownSignalFP), .out(beginFPSignal));
-	countdown_FP makeFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(countdownSignalFP), .pressurized(fillandPressurizeSignal));
-	// UserInput_Low2High changeFPState(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(fillandPressurizeSignal), .out(FPSignalOneClock));
-	Counter_1bit Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(fillandPressurizeSignal), .Count(FPState));
+	countdown_FP makeFP(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(countdownSignalFP), .devacuated(Devacuate), .pressurized(fillandPressurizeSignal));
+	// UserInput_Low2High makeFPIncrement(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(Depressurize), .out(DepressurizeOneClock));
+	Counter_1bit_Start0 Pressurized(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(FPIncrement), .Count(FPState));
 	assign LEDR[5] = FPState;
 	
 
 	// Creates an evacuate signal when key 2 is pressed
-	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, EVSignalOneClock, EVState;
+	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, EVSignalOneClock, EVState, Depressurize, DepressurizeOneClock, EVIncrement;
+	or incrementEVState(EVIncrement, evacuateSignal, Devacuate);
+	
 	UserInput_High2Low keyEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key2), .out(EVKey));
-	Evacuate e(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_Evacuation(key2), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .Evacuated(EVState), .Evacuation(countdownSignalEV));
+	Evacuate e(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_Evacuation(EVKey), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .Evacuated(EVState),.Evacuation(countdownSignalEV));
 	// UserInput_High2Low beginEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(countdownSignalEV), .out(beginEVSignal));
-	countdown_Evacuate makeEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(beginEVSignal), .evacuated(evacuateSignal));
-	// UserInput_High2Low makeEVCountdown(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(evacuateSignal), .out(EVSignalOneClock));
-	Counter_1bit Evacuated(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(evacuateSignal), .Count(EVState));
+	countdown_Evacuate makeEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .countdown(countdownSignalEV), .depressurized(Depressurize), .evacuated(evacuateSignal));
+	// UserInput_Low2High makeEVIncrement(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(Devacuate), .out(DevacuateOneClock));
+	Counter_1bit_Start1 Evacuated(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(EVIncrement), .Count(EVState));
 	assign LEDR[6] = EVState;
-	/*
-	// Creates an evacuation signal when key 2 is pressed
-	wire evacuateChamberSignal;
-<<<<<<< HEAD
-<<<<<<< HEAD
-	UserInput_High2Low makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
-	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
 	
-=======
-	reg ChamberIn;
-	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
-	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
->>>>>>> b8a4c2462c6aa2fab4042ae47a30f4305f49edf6
 	
-=======
-
-	UserInput_OneClock makeEC(clock, resetInputSignal, key2, EvacuateChamber);     // need code using last two
-	Evacuate e(Clock, Reset, begin_Evacuation, InnerClosed, OuterClosed, Evacuated, Evacuation);
-	
-
-	reg ChamberIn;
-	UserInput_OneClock makeEC(clock, resetInputSignal, key2, evacuateChamberSignal);     // need code using last two
-	Evacuate e(clock, resetInputSignal, evacuateChamberSignal, ports[1], ports[0], ChamberIn,,);
-	
->>>>>>> 9eef407b640cd65a7e82fec6d59528ad4c6c137c
-*/
 endmodule
