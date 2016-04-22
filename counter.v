@@ -35,12 +35,12 @@ module counter (clk, reset, counterSeconds, start, signal, count);
 	output wire signal;
 	output reg [9:0] count;
 	reg go;
-	reg [12:0] increment;
+	reg [7:0] increment;
 	always@(posedge clk) begin
 		if(!reset || increment == 0) begin
-			increment <= 13'b1011111011000;
+			increment <= 8'b10111111;
 		end else begin
-			increment <= increment - 13'b1;
+			increment <= increment - 8'b1;
 		end
 	end
 	always @(posedge clk) begin
@@ -58,6 +58,5 @@ module counter (clk, reset, counterSeconds, start, signal, count);
 		end
 	end
 	assign signal = count == 10'b0;
-// >>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23
 endmodule
 				
