@@ -33,12 +33,20 @@ module counter (clk, reset, counterSeconds, start, signal, count);
 	input clk, reset, start;
 	input [9:0] counterSeconds;
 	output wire signal;
-	output wire [9:0] count;
+	output reg [9:0] count;
 	reg go;
+	reg [12:0] increment;
+	always@(posedge clk) begin
+		if(!reset || increment == 0) begin
+			increment <= 13'b1011111011000;
+		end else begin
+			increment <= increment - 13'b1;
+		end
+	end
 	always @(posedge clk) begin
 		if (!reset || start) begin
 			count <= counterSeconds;
-		end else if (count != 10'b0 && go) begin
+		end else if (count != 10'b0 && go && increment == 0) begin
 			count <= count - 10'b1;
 		end
 	end
