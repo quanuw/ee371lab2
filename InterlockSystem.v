@@ -13,6 +13,7 @@
 `include "counter.v"
 */
 
+
 module InterlockSystem(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW);
 	
@@ -39,22 +40,38 @@ SW);
 	Metastability key2m(.clk(CLOCK_50), .rst(resetInputSignal), .press(KEY[2]), .metaFree(key2));
 	
 	// State of outer port (open or closed)
+//<<<<<<< HEAD
 	wire OPOpenClose, OPState, OPFlipSignal1, OPFlipSignal2;
 	// OCPort OP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw2), .OpenClose(OPOpenClose), .EVState(EVState));
 	UserInput_High2Low incrementOP1(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(sw2), .out(OPFlipSignal1));
 	UserInput_Low2High incrementOP2(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(sw2), .out(OPFlipSignal2));
 	or checkOPFlip(OPFlip, OPFlipSignal1, OPFlipSignal2);
 	and incrementOPState(OPOpenClose, OPFlip, !EVState);
+	/*
+=======
+	wire OPOpenClose, OPState;
+	OCPort OP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw2), .OpenClose(OPOpenClose), .EVState(EVState));
+>>>>>>> 2d3c6978af9f9573d9b0d176905916ab6a779f29
+	*/
 	Counter_1bit_Start1 OuterPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(OPOpenClose), .Count(OPState));
 	assign LEDR[2] = OPState;
 	
 	// State of inner port (open or closed)
+// <<<<<<< HEAD
 	wire IPOpenClose, IPState, IPIncrement, IPFlipSignal1, IPFlipSignal2, IPFlip;
 	// OCPort IP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw3), .OpenClose(IPOpenClose), .EVState(EVState));
 	UserInput_High2Low incrementIP1(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(sw3), .out(IPFlipSignal1));
 	UserInput_Low2High incrementIP2(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(sw3), .out(IPFlipSignal2));
 	or checkIPFlip(IPFlip, IPFlipSignal1, IPFlipSignal2);
 	and incrementIPState(IPOpenClose, IPFlip, !FPState);
+	
+	/*
+=======
+	wire IPOpenClose, IPState;
+	OCPort IP(.Clock(CLOCK_50), .Reset(resetInputSignal), .SwitchFlip(sw3), .OpenClose(IPOpenClose), .EVState(EVState));
+>>>>>>> 2d3c6978af9f9573d9b0d176905916ab6a779f29
+	*/
+	
 	Counter_1bit_Start1 InnerPort(.Clock(CLOCK_50), .Reset(resetInputSignal), .Increase(IPOpenClose), .Count(IPState));
 	assign LEDR[3] = IPState;
 	
@@ -73,7 +90,13 @@ SW);
 	
 	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, EVSignalOneClock,/* EVState, Depressurize,*/ DepressurizeOneClock, EVIncrement;
 	// Creates an evacuate signal when key 2 is pressed
+// <<<<<<< HEAD
 	or incrementEVState(EVIncrement, EVSignalOneClock, FPSignalOneClock);
+	/*
+=======
+	or incrementEVState(EVIncrement, evacuateSignal, Devacuate);
+>>>>>>> 2d3c6978af9f9573d9b0d176905916ab6a779f29
+	*/
 	
 	UserInput_High2Low keyEV(.Clock(CLOCK_50), .Reset(resetInputSignal), .in(key2), .out(EVKey));
 	Evacuate e(.Clock(CLOCK_50), .Reset(resetInputSignal), .begin_Evacuation(EVKey), .InnerClosed(IPState), .OuterClosed(OPState), .Pressurized(FPState), .Evacuated(EVState),.Evacuation(countdownSignalEV));
