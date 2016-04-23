@@ -1,34 +1,31 @@
-module arriveAndDepartSignal_tester(Clock, Reset, Increase);
-	output reg Clock, Reset, Increase;
+module arriveAndDepartSignal_tester(clk, rst, arriveSwitch, departSwitch);
+	output reg clk, rst, arriveSwitch, departSwitch;
 	
 	// Set up the clock.
 	parameter CLOCK_PERIOD=2;
-	initial Clock=1;
+	initial clk=1;
 	always begin
 		#(CLOCK_PERIOD/2);
-		Clock = ~Clock;
+		clk = ~clk;
 	end
 	
 	// Set up the inputs to the design. Each line is a clock cycle.
 	initial begin
-										@(posedge Clock);
-		Reset <= 1;						@(posedge Clock);			
-										@(posedge Clock);
-		Reset <= 0; Increase <= 1;		@(posedge Clock);
-		Increase <= 0;					@(posedge Clock);
-										@(posedge Clock);
-		Increase <= 1;					@(posedge Clock);
-		Increase <= 0;					@(posedge Clock);
-										@(posedge Clock);
-		Increase <= 1;					@(posedge Clock);
-		Increase <= 0;					@(posedge Clock);
-										@(posedge Clock);
-		Increase <= 1;					@(posedge Clock);
-		Increase <= 0;					@(posedge Clock);
-										@(posedge Clock);
-		Increase <= 1;					@(posedge Clock);
-		Increase <= 0;					@(posedge Clock);
-										@(posedge Clock);	
-
+		departSwitch <= 0; arriveSwitch <= 0;
+		@(posedge clk);
+		rst <= 1;	
+		@(posedge clk);			
+		rst <= 0;					
+		@(posedge clk);
+		rst <= 1;						
+		@(posedge clk);
+		arriveSwitch <= 1;			
+		@(posedge clk);
+		departSwitch <= 1;	
+		@(posedge clk);
+		arriveSwitch <= 0;
+		@(posedge clk);
+		departSwitch <= 0;
+		@(posedge clk);
 	end
 endmodule

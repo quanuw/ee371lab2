@@ -42,6 +42,8 @@ module counter_tester(Clock, Reset, beginCount, counterSeconds);
 										@(posedge Clock);										
 
 	end
+	
+/*
 =======
 module counter_tester(Clock, Reset, Start);
 	output reg Clock, Reset, Start;
@@ -90,6 +92,7 @@ module counter_tester(Clock, Reset, Start);
 	end
 >>>>>>> 65c9eb1007036024b958e6fe0086b78dfac62c23
 =======
+/*
 module counter_tester(Clock, Reset, Start);
 	output reg Clock, Reset, Start;
 	
@@ -150,5 +153,6 @@ module counter_tester(Clock, Reset, Start);
 										@(posedge Clock);	
 
 	end
->>>>>>> f0f5a8d88cdd457b58cf8f796f57b14ad7e54329
+// >>>>>>> f0f5a8d88cdd457b58cf8f796f57b14ad7e54329
 endmodule
+*/

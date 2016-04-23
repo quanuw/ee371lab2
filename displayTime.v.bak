@@ -6,7 +6,7 @@ module displayTime (Clock, Reset, countArrive, countFandP, countEvacuate, HEXArr
 	
 	
 	// State encoding.
-	parameter [6:0] A = 7'b1000000, B = 7'b1111001, C = 7'b0100100, D = 7'b0110000, E = 7'b0011001, F = 7'b0010010, G = 7'b0000010, H = 7'b1111000, I = 7'b0000000;
+	parameter [6:0] A = 7'b1000000, B = 7'b1111001, C = 7'b0100100, D = 7'b0110000, E = 7'b0011001, F = 7'b0010010, G = 7'b0000010, H = 7'b1111000, I = 7'b1111111;
 	
 	// Next State logic
 	always @(*) begin 

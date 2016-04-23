@@ -1,5 +1,5 @@
-module MetastabilityDFlipFlop(q, qBar, D, clk, rst);
-	input D, clk, rst;
+module MetastabilityDFlipFlop(q, qBar, D, clk);
+	input D, clk;
 	output q, qBar;
 	reg q;
 	not n1 (qBar, q);
