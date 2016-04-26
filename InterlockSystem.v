@@ -41,12 +41,15 @@ SW);
 	
 	wire aSignal, dSignal, AorDSignal;
 	wire [9:0] countdownAorD;
+	wire arriveSignal, departSignal;
 	// Determines state of arrive and depart signal leds 
-	arriveAndDepartSignal arriveAndDepart(.arriveSignal(LEDR[0]), .departSignal(LEDR[1]), .arriveSwitch(SW[0]), .departSwitch(SW[1]), .clk(clock), .rst(resetInputSignal));
-	UserInput_Low2High a(.Clock(clock), .Reset(resetInputSignal), .in(LEDR[0]), .out(aSignal));
-	UserInput_Low2High d(.Clock(clock), .Reset(resetInputSignal), .in(LEDR[1]), .out(dSignal));
+	arriveAndDepartSignal arriveAndDepart(.arriveSignal(arriveSignal), .departSignal(departSignal), .arriveSwitch(SW[0]), .departSwitch(SW[1]), .clk(clock), .rst(resetInputSignal));
+	UserInput_Low2High a(.Clock(clock), .Reset(resetInputSignal), .in(arriveSignal), .out(aSignal));
+	UserInput_Low2High d(.Clock(clock), .Reset(resetInputSignal), .in(departSignal), .out(dSignal));
 	or checkBathFlip(AorDSignal, aSignal, dSignal);
 	counter makeAorD(.clk(clock), .reset(resetInputSignal), .counterSeconds(10'b0000000101), .start(aorDSignal), .signal(), .countInProcess(), .count(countdownAorD));
+	assign LEDR[0] = arriveSignal;
+	assign LEDR[1] = departSignal;
 	
 	
 	// State of outer port (open or closed)
