@@ -22,9 +22,9 @@ SW);
 	input [3:0] KEY; // True when not pressed, False when pressed
 	input [9:0] SW;
 	
-	assign [6:0] HEX1 = 7'b1111111;
-	assign [6:0] HEX3 = 7'b1111111;
-	assign [6:0] HEX5 = 7'b1111111;
+	assign HEX1 = 7'b1111111;
+	assign HEX3 = 7'b1111111;
+	assign HEX5 = 7'b1111111;
 	
 	wire [31:0] divided_clocks;
 	clock_divider dividclock(.clock(CLOCK_50), .divided_clocks(divided_clocks));
@@ -44,11 +44,11 @@ SW);
 	wire [9:0] countdownAorD;
 	wire arriveSignal, departSignal;
 	// Determines state of arrive and depart signal leds 
-	arriveAndDepartSignal arriveAndDepart(.arriveSignal(arriveSignal), .departSignal(departSignal), .arriveSwitch(sw0), .departSwitch(sw1), .clk(clock), .rst(resetInputSignal));
+	arriveAndDepartSignal arriveAndDepart(.arriveSignal(arriveSignal), .departSignal(departSignal), .arriveSwitch(sw0), .departSwitch(sw1), .clk(clock), .rst(resetInputSignal), .EVState(EVState));
 	UserInput_Low2High a(.Clock(clock), .Reset(resetInputSignal), .in(arriveSignal), .out(aSignal));
 	UserInput_Low2High d(.Clock(clock), .Reset(resetInputSignal), .in(departSignal), .out(dSignal));
 	or checkBathFlip(AorDSignal, aSignal, dSignal);
-	counter makeAorD(.clk(clock), .reset(resetInputSignal), .counterSeconds(10'b0000000101), .start(aorDSignal), .signal(), .countInProcess(), .count(countdownAorD));
+	counter makeAorD(.clk(clock), .reset(resetInputSignal), .counterSeconds(10'b0000000101), .start(AorDSignal), .signal(), .countInProcess(), .count(countdownAorD));
 	assign LEDR[0] = arriveSignal;
 	assign LEDR[1] = departSignal;
 	
