@@ -1,4 +1,4 @@
-/*
+`include "MetastabilityDFlipFlop.v"
 `include "Metastability.v"
 `include "clock_divider.v"
 `include "UserInput_High2Low.v"
@@ -12,7 +12,6 @@
 `include "counter.v"
 `include "displayTime.v"
 `include "arriveAndDepartSignal.v"
-*/
 
 module InterlockSystem(CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, KEY, LEDR,
 SW);
@@ -40,8 +39,15 @@ SW);
 	Metastability key1m(.clk(clock), .press(KEY[1]), .metaFree(key1));
 	Metastability key2m(.clk(clock), .press(KEY[2]), .metaFree(key2));
 	
+	wire aSignal, dSignal, AorDSignal;
+	wire [9:0] countdownAorD;
 	// Determines state of arrive and depart signal leds 
 	arriveAndDepartSignal arriveAndDepart(.arriveSignal(LEDR[0]), .departSignal(LEDR[1]), .arriveSwitch(SW[0]), .departSwitch(SW[1]), .clk(clock), .rst(resetInputSignal));
+	UserInput_Low2High a(.Clock(clock), .Reset(resetInputSignal), .in(LEDR[0]), .out(aSignal));
+	UserInput_Low2High d(.Clock(clock), .Reset(resetInputSignal), .in(LEDR[1]), .out(dSignal));
+	or checkBathFlip(AorDSignal, aSignal, dSignal);
+	counter makeAorD(.clk(clock), .reset(resetInputSignal), .counterSeconds(10'b0000000101), .start(aorDSignal), .signal(), .countInProcess(), .count(countdownAorD));
+	
 	
 	// State of outer port (open or closed)
 	wire OPOpenClose, OPState, OPFlipSignal1, OPFlipSignal2;
@@ -65,7 +71,7 @@ SW);
 	assign LEDR[3] = IPState;
 	
 	// Creates a fillandPressurize signal when key 1 is pressed
-	wire FPKey, countdownSignalFP, beginFPSignal, fillandPressurizeSignal, FPSignalOneClock, FPState, devacuate, DevacuateOneClock, FPIncrement, inProcessFP;
+	wire FPKey, countdownSignalFP, beginFPSignal, fillandPressurizeSignal, FPSignalOneClock/*, FPState*/, devacuate, DevacuateOneClock, FPIncrement/*, inProcessFP*/;
 	wire [9:0] countdownFP;
 	or incrementFPState(FPIncrement, FPSignalOneClock, EVSignalOneClock);
 	
@@ -76,7 +82,7 @@ SW);
 	Counter_1bit_Start0 Pressurized(.Clock(clock), .Reset(resetInputSignal), .Increase(FPIncrement), .Count(FPState));
 	assign LEDR[5] = FPState;
 	
-	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, EVSignalOneClock,/* EVState, Depressurize,*/ DepressurizeOneClock, EVIncrement, inProcessEV;
+	wire EVKey, countdownSignalEv, beginEVSignal, evacuateSignal, /*EVSignalOneClock,*//* EVState, Depressurize,*/ DepressurizeOneClock, EVIncrement/*, inProcessEV*/;
 	wire [9:0] countdownEV;
 	
 	// Creates an evacuate signal when key 2 is pressed
@@ -89,6 +95,6 @@ SW);
 	Counter_1bit_Start1 Evacuated(.Clock(clock), .Reset(resetInputSignal), .Increase(EVIncrement), .Count(EVState));
 	assign LEDR[6] = EVState;
 	
-	displayTime countdownTimes(.Clock(CLOCK_50), .Reset(resetInputSignal), .countArrive(), .countFandP(countdownFP), .countEvacuate(countdownEV),  .HEXArrive(), .HEXFandP(HEX0), .HEXEvacuate(HEX1));
+	displayTime countdownTimes(.Clock(CLOCK_50), .Reset(resetInputSignal), .countArrive(countdownAorD), .countFandP(countdownFP), .countEvacuate(countdownEV),  .HEXArrive(HEX0), .HEXFandP(HEX2), .HEXEvacuate(HEX4));
 	
 endmodule
