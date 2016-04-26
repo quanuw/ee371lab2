@@ -40,6 +40,8 @@ SW);
 	Metastability key1m(.clk(clock), .press(KEY[1]), .metaFree(key1));
 	Metastability key2m(.clk(clock), .press(KEY[2]), .metaFree(key2));
 	
+	assign resetInputSignal = key0;
+	
 	wire aSignal, dSignal, AorDSignal;
 	wire [9:0] countdownAorD;
 	wire arriveSignal, departSignal;
